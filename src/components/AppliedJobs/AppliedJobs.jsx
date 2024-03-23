@@ -15,6 +15,7 @@ const AppliedJobs = () => {
             const jobsApplied = jobs.filter(job => storedJobIDs.includes(job.id));
             setApplied(jobsApplied); // Why? jobsApplied is already an array
             console.log(jobsApplied);
+            
             // Alternative Way
             /*             
                         const jobsAppliedAlt = [];
