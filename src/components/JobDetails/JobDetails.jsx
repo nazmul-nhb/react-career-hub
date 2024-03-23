@@ -1,13 +1,32 @@
 import { useLoaderData, useParams } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import left from '../../assets/images/bg1.png';
 import right from '../../assets/images/bg2.png';
+import { getStoredJobApplication, saveJobApplication } from "../../utilities/localStorage";
 
 const JobDetails = () => {
     const jobs = useLoaderData();
+
     const { id } = useParams();
     const intID = parseInt(id);
-    const job = jobs.find(job => job.id === intID);
-    const { job_description, job_responsibility, educational_requirements, experiences, contact_information, salary, job_title } = job;
+
+    const selectedJob = jobs.find(job => job.id === intID);
+
+    const { job_description, job_responsibility, educational_requirements, experiences, contact_information, salary, job_title } = selectedJob;
+
+    const handleApplyJob = () => {
+        const storedJobApplications = getStoredJobApplication();
+        // const exists = storedJobApplications.filter(jobID => jobID.includes(intID));
+        if (storedJobApplications.includes(intID)) {
+            toast.warn('Already Applied');
+        } else{
+            toast.success('Successfully Applied!');
+        }
+        // handleApplyJob && toast.warn('Already Applied');
+        saveJobApplication(intID);
+    }
+
     return (
         <div>
             <div className="flex justify-center">
@@ -30,9 +49,10 @@ const JobDetails = () => {
                     <h2 className="">Phone:</h2><p className="">{contact_information.phone}</p>
                     <h2 className="">Email:</h2><p className="">{contact_information.email}</p>
                     <h2 className="">Address:</h2><p className="">{contact_information.address}</p>
-                    <button className="btn btn-primary w-full">Apply Now</button>
+                    <button onClick={handleApplyJob} className="btn btn-primary w-full">Apply Now</button>
                 </div>
             </div>
+            <ToastContainer></ToastContainer>
         </div>
     );
 };
